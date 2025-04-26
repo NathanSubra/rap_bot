@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RapBot Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h1>🎤 RapBot</h1>
+
+    <form method="POST">
+      <label for="artist">Rapper / Artist:</label>
+      <input id="artist" name="artist" type="text" value="{{ artist }}" required>
+
+      <label for="content">Song Topic / Content:</label>
+      <textarea id="content" name="content" rows="4" required>{{ content }}</textarea>
+
+      <button type="submit">Spit Bars 🔥</button>
+    </form>
+
+    {% if rap %}
+    <section class="rap-output">
+      <h2>Your Track:</h2>
+      <pre>{{ rap }}</pre>
+    </section>
+    {% endif %}
+  </div>
+</body>
+</html>

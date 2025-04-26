@@ -1,0 +1,49 @@
+body {
+    font-family: system-ui, sans-serif;
+    background: #101010;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .container {
+    max-width: 640px;
+    width: 100%;
+  }
+  
+  h1 { text-align: center; margin-bottom: 1rem; }
+  
+  label { display: block; margin-bottom: 0.5rem; }
+  
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: none;
+    resize: vertical;
+  }
+  
+  button {
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background: #ff0080;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .rap-output {
+    margin-top: 2rem;
+    background: #181818;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+  
+  pre {
+    white-space: pre-wrap;
+    font-family: "Courier New", monospace;
+  }
+  
