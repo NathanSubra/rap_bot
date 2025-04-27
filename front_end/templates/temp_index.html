@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-3xl font-semibold mb-4">Generate Rap Lyrics</h1>
+<form id="genForm" class="space-y-4">
+<input name="title"  placeholder="Song title (optional)" class="border p-2 w-full">
+  <input name="artist" placeholder="Artist" class="border p-2 w-full" required>
+  <input name="topic" placeholder="Topic" class="border p-2 w-full" required>
+  <input name="additional_context" placeholder="Additional Context"class="border p-2 w-full">
+  <button class="bg-blue-600 text-white px-4 py-2" type="submit">Generate</button>
+</form>
+<section id="result" class="hidden mt-6">
+  <h2 class="text-2xl mb-2">Lyrics</h2>
+  <pre id="lyrics" class="whitespace-pre-wrap bg-white p-4 border"></pre>
+<button id="saveBtn"
+        class="bg-green-600 text-white px-4 py-2 mt-4 hidden">
+  Save to Library
+</button>
+</section>
+<script>
+/* ---------- DOM handles ---------- */
+const form     = document.getElementById('genForm');
+const resSec   = document.getElementById('result');
+const lyricsEl = document.getElementById('lyrics');
+const saveBtn  = document.getElementById('saveBtn');
+
+/* ---------- state between clicks ---------- */
+let lastPayload = {};   // artist, topic, additional_context, title
+let lastLyrics  = "";   // text returned by /generate
+
+/* ---------- generate lyrics ---------- */
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // 1. Grab fields from form
+  lastPayload = Object.fromEntries(new FormData(form).entries());
+
+  // 2. Call /generate  (only artist / topic / additional_context)
+  const genBody = {
+    artist:             lastPayload.artist,
+    topic:              lastPayload.topic,
+    additional_context: lastPayload.additional_context || ""
+  };
+
+  resSec.classList.add('hidden');
+  const r = await fetch('/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:   JSON.stringify(genBody)
+  });
+
+  const j = await r.json();
+  lastLyrics = j.lyrics;
+
+  // 3. Show result
+  lyricsEl.textContent = lastLyrics;
+  resSec.classList.remove('hidden');
+  saveBtn.classList.remove('hidden');
+});
+
+/* ---------- save to library ---------- */
+saveBtn.addEventListener('click', async () => {
+  const payload = {
+    title:   lastPayload.title || `Freestyle ${Date.now()}`,
+    artist:  lastPayload.artist,
+    topic:   lastPayload.topic,
+    additional_context: lastPayload.additional_context || "",
+    lyrics:  lastLyrics,
+    audio:   ""            // still stubbed
+  };
+
+  console.log("POST /songs payload →", payload);  // debug
+
+  const res = await fetch('/songs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:   JSON.stringify(payload)
+  });
+
+  if (res.ok) {
+    alert('Saved!');
+    saveBtn.classList.add('hidden');
+  } else {
+    alert('Save failed');
+  }
+});
+</script>
+
+
+<!--<script>
+const form=document.getElementById('genForm');
+const resSec=document.getElementById('result');
+const lyricsEl=document.getElementById('lyrics');
+const saveBtn = document.getElementById('saveBtn');
+
+let lastPayload   = {};   // will hold artist/topic/context/title
+let lastLyrics   = null;  // will hold text for saving later
+let lastArtist = null;
+{#let lastLyrics = null;      // hold text for saving later#}
+let lastTopic  = null;      // remember artist / sub-genre
+let lastForm   = null;      // remember artist / sub-genre
+let lastName = null;
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  lastPayload = Object.fromEntries(new FormData(form).entries());
+  {#const data = Object.fromEntries(new FormData(form).entries());#}
+  {#lastForm = data;#}
+
+  // ... existing fetch('/generate') code ...
+  lastLyrics = j.lyrics;
+  saveBtn.classList.remove('hidden');
+});
+
+saveBtn.addEventListener('click', async () => {
+  const payload = {
+    title: `Freestyle ${Date.now()}`,
+    artist: lastForm.artist,
+    sub_genre: lastForm.sub_genre,
+    lyrics: lastLyrics,
+    audio: ""          // omit or add if you later do TTS
+  };
+  const res = await fetch('/songs', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  if (res.ok) alert('Saved!');
+});
+form.addEventListener('submit',async e=>{
+  e.preventDefault();
+  resSec.classList.add('hidden');
+  const data=Object.fromEntries(new FormData(form).entries());
+  const r=await fetch('/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+  const j=await r.json();
+  lyricsEl.textContent=j.lyrics;
+  resSec.classList.remove('hidden');
+});
+</script>
+-->
+{% endblock %}
