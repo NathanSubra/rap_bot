@@ -57,9 +57,12 @@ def index():
         if artist and content:
             rap = generate_rap(artist, content)
 
-
     return render_template("index.html", rap=rap, artist=artist, content=content)
 
+
+@app.route("/library", methods=["GET"])
+def library():
+    return render_template("library.html")
 
 if __name__ == "__main__":
     # Set debug=False in production

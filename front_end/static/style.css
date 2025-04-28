@@ -46,4 +46,37 @@ body {
     white-space: pre-wrap;
     font-family: "Courier New", monospace;
   }
-  
+
+nav {
+    overflow: hidden;
+    background-color: black;
+    position:absolute;
+    width:100%;
+    left:0;
+    right:0;
+    top:0;
+    padding-bottom: 20;
+}
+nav a {
+    float: left;
+    display:block;
+    color: white;
+    text-align: center;
+    padding: 16px 16px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #202020;
+    cursor:pointer;
+}
+
+#current {
+    float: left;
+    display:block;
+    background-color: #ff0080;
+    text-align: center;
+    padding: 16px 16px;
+    text-decoration: none;
+    cursor:default;
+}
