@@ -8,6 +8,7 @@ body {
   }
   
   .container {
+    display: block;
     max-width: 640px;
     width: 100%;
   }
@@ -41,7 +42,7 @@ body {
     padding: 1rem;
     border-radius: 6px;
   }
-  
+
   pre {
     white-space: pre-wrap;
     font-family: "Courier New", monospace;
@@ -49,7 +50,7 @@ body {
 
 nav {
     overflow: hidden;
-    background-color: black;
+    background-color: #111111;
     position:absolute;
     width:100%;
     left:0;
@@ -79,4 +80,9 @@ nav a:hover {
     padding: 16px 16px;
     text-decoration: none;
     cursor:default;
+}
+
+.libraryblock {
+    display: center;
+    width: 75%;
 }
