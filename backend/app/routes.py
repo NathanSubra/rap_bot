@@ -6,7 +6,7 @@ from . import db
 from .services.generator import RapGenerator
 from .services.tts import RapVocalizer
 
-TEMPLATE_DIR = pathlib.Path(__file__).resolve().parents[2] / "frontend" / "templates"
+TEMPLATE_DIR = pathlib.Path(__file__).resolve().parents[2] / "front_end" / "templates"
 
 bp = Blueprint(
     "routes",
