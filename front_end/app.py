@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv        # pip install python-dotenv
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, url_for
 import openai                         # pip install openai
 
 load_dotenv()                         # pulls OPENAI_API_KEY from .env

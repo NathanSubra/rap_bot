@@ -3,3 +3,5 @@ Flask-SQLAlchemy==3.1.1
 Flask-Cors==4.0.0
 python-dotenv==1.0.1
 openai==1.23.0
+requests
+uberduck      # Uberduck API wrapper

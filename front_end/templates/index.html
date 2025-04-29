@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>RapBot</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('routes.static', filename='style.css') }}">
 </head>
 <nav>
   <a id="current">Home</a>
@@ -13,24 +13,52 @@
   <div class="container">
     <h1>🎤 RapBot</h1>
 
-    <form method="POST">
+    <form id="genForm">
       <label for="artist">Rapper / Artist:</label>
       <input id="artist" name="artist" type="text" value="{{ artist }}" required>
 
       <label for="content">Song Topic / Content:</label>
       <textarea id="content" name="content" rows="4" required>{{ content }}</textarea>
 
+        <label for="additional_context">Additional Context:</label>
+        <input id="additional_context" name="additional_context" placeholder="Additional Context"class="border p-2 w-full">
+
+        <label for="prompt">Style Prompt&nbsp;(optional):</label>
+  <input id="prompt"
+         name="prompt"
+         placeholder="e.g. trap, dark, autotune, heavy bass">
+
       <button type="submit">Spit Bars 🔥</button>
     </form>
+  <section id="result" class="hidden mt-6">
+    <h2 class="text-2xl mb-2">Lyrics</h2>
+    <pre id="lyrics" class="whitespace-pre-wrap bg-white p-4 border"></pre>
+      <audio id="player" controls class="hidden"></audio>
 
-    {% if rap %}
-    <section class="rap-output">
-      <h2>Your Track:</h2>
-      <pre>{{ rap }}</pre>
-    </section>
-    {% endif %}
-  </div>
+  <button id="saveBtn"
+        class="bg-green-600 text-white px-4 py-2 mt-4 hidden">
+  Save to Library
+</button>
+</section>
+
+{#    {% if rap %}#}
+{#    <section class="rap-output">#}
+{#      <h2>Your Track:</h2>#}
+{#      <pre>{{ rap }}</pre>#}
+{#    </section>#}
+{#    {% endif %}#}
+{#  </div>#}
 <script>
+    function base64ToBlobUrl(b64data, mimeType) {
+  const byteCharacters = atob(b64data);
+  const byteNumbers    = new Uint8Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const blob = new Blob([byteNumbers], { type: mimeType });
+  return URL.createObjectURL(blob);      // safe to assign to <audio>.src
+}
+
 /* ---------- DOM handles ---------- */
 const form     = document.getElementById('genForm');
 const resSec   = document.getElementById('result');
@@ -40,6 +68,7 @@ const saveBtn  = document.getElementById('saveBtn');
 /* ---------- state between clicks ---------- */
 let lastPayload = {};   // artist, topic, additional_context, title
 let lastLyrics  = "";   // text returned by /generate
+let lastAudio = "";
 
 /* ---------- generate lyrics ---------- */
 form.addEventListener('submit', async (e) => {
@@ -64,6 +93,22 @@ form.addEventListener('submit', async (e) => {
 
   const j = await r.json();
   lastLyrics = j.lyrics;
+  lastAudio  = j.audio;
+
+  /* ----- lyrics ----- */
+lyricsEl.textContent = j.lyrics;
+
+/* ----- audio ----- */
+const audioUrl = base64ToBlobUrl(j.audio, j.mime);
+const player   = document.getElementById('player');
+player.src = audioUrl;
+player.classList.remove('hidden');   // reveal controls
+player.load();                       // reload source
+// player.play(); // uncomment if you want autoplay
+
+/* ----- UI ----- */
+resSec.classList.remove('hidden');
+saveBtn.classList.remove('hidden');
 
   // 3. Show result
   lyricsEl.textContent = lastLyrics;
@@ -79,7 +124,7 @@ saveBtn.addEventListener('click', async () => {
     topic:   lastPayload.topic,
     additional_context: lastPayload.additional_context || "",
     lyrics:  lastLyrics,
-    audio:   ""            // still stubbed
+    audio:   lastAudio             // still stubbed
   };
 
   console.log("POST /songs payload →", payload);  // debug
