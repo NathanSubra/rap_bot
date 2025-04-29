@@ -6,7 +6,6 @@ from .models import Song
 from . import db
 from .services.generator import RapGenerator
 from .services.tts import RapVocalizer
-from .services.uberduck_tts import UberduckTTS
 from .services.mureka_music import MurekaMusic
 
 # NEW
