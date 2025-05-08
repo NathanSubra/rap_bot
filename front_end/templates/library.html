@@ -59,8 +59,20 @@ ${s.lyrics}
 
         ${s.has_audio ? `<audio controls class="w-full" src="/songs/${s.id}/audio"></audio>`
                       : `<p class='text-xs text-gray-400 italic'>No audio saved</p>`}
+        <button class="deleteBtn" data-id="${s.id}">🗑 Delete</button>
       `;
       list.appendChild(li);
+      li.querySelector(".deleteBtn").onclick = async (e) => {
+  const id = e.target.dataset.id;
+  if (!confirm("Delete this song forever?")) return;
+
+  const res = await fetch(`/songs/${id}`, { method: "DELETE" });
+  if (res.ok) {
+    li.remove();                    // remove from DOM
+  } else {
+    alert("Delete failed");
+  }
+};
     }
   } catch (err) {
     list.innerHTML = `<p class='text-red-600'>${err.message}</p>`;

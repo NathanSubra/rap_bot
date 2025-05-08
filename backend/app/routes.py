@@ -27,7 +27,7 @@ generator = RapGenerator()
 tts = RapVocalizer()
 
 generator = RapGenerator()
-vocalizer = UberduckTTS()
+# vocalizer = UberduckTTS()
 musicgen = MurekaMusic()
 
 
@@ -112,3 +112,10 @@ def song_audio(sid):
     # if not s.audio:
     #     abort(404)
     return Response(s.audio, mimetype="audio/mpeg")
+
+@bp.route("/songs/<int:sid>", methods=["DELETE"])
+def delete_song(sid):
+    song = Song.query.get_or_404(sid)
+    db.session.delete(song)
+    db.session.commit()
+    return "", 204        # 204 No Content
