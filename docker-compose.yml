@@ -1,18 +1,11 @@
-version: "3.9"
-
 services:
   rapbot:
     build: .
     container_name: rapbot
     ports:
       - "8000:8000"
-    environment:
-      # Flask
-      FLASK_ENV: production            # or "development"
-      OPENAI_API_KEY:  "xyz"
-      MUREKA_API_KEY:  "xyz"
-      # Optional DB URI (else uses sqlite:///backend/instance/rapbot.db)
-      # DATABASE_URI: "postgresql://user:pass@db/rapbot"
+    env_file:
+      - .env
     volumes:
       # persist the SQLite DB and any uploads
       - rapbot_data:/app/backend/instance

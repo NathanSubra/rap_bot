@@ -5,7 +5,6 @@ from flask import Response, send_file
 from .models import Song
 from . import db
 from .services.generator import RapGenerator
-from .services.tts import RapVocalizer
 from .services.mureka_music import MurekaMusic
 
 # NEW
@@ -24,10 +23,8 @@ bp = Blueprint(
 
 # bp = Blueprint('routes', __name__)
 generator = RapGenerator()
-tts = RapVocalizer()
 
 generator = RapGenerator()
-# vocalizer = UberduckTTS()
 musicgen = MurekaMusic()
 
 
@@ -51,8 +48,7 @@ def generate():
     lyrics = generator.generate(artist, #sub_genre,
                                 topic,
                                 additional_context=additional_context)
-    # audio = vocalizer.synthesize(lyrics)
-    # audio_bytes = tts.synthesize(lyrics)
+
     audio_bytes = musicgen.generate(
         lyrics,
         prompt=data.get("prompt")  # optional extra control

@@ -4,7 +4,7 @@ _client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 class RapGenerator:
-    def __init__(self, model=os.getenv("OPENAI_MODEL", "gpt-4o-mini")):
+    def __init__(self, model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini")):
         self.model = model
 
     def generate(self, artist: str, #sub_genre: str,
