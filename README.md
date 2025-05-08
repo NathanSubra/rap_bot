@@ -27,8 +27,6 @@ An interactive web application that generates rap lyrics in the style of any art
   OPENAI_API_KEY=<OpenAI API key>
   MUREKA_API_KEY=<Mureka AI API key>
   SECRET_KEY=<Flask secret key>
-  DATABASE_URI=<optional, defaults to SQLite instance/rapbot.db>
-
 ---
 
 ## Installation & Startup
@@ -59,7 +57,7 @@ An interactive web application that generates rap lyrics in the style of any art
 > python3 -m venv venv
 > source venv/bin/activate
 > pip install -r requirements.txt
-> flask run --host=0.0.0.0 --port=8000
+> flask --app backend.app run
 > ```
 
 ---
